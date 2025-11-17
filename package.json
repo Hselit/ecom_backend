@@ -1,0 +1,21 @@
+{
+  "name": "ecom",
+  "version": "1.0.0",
+  "description": "ecommerce-backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "inversify": "^7.10.4",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.19.0",
+    "tsc": "^2.0.4",
+    "typescript": "^5.9.3"
+  }
+}
