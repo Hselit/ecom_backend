@@ -7,6 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model address{
+  id String @map("_id") @id
+  street1 String @map("Street1")
+  street2 String? @map("Street2")
+  city  String @map("City")
+  state String @map("State")
+  country String @map("Country")
+  lat Float @map("Lat")
+  lng Float @map("Lng")
+  userId String @map("UserID")
+
+  user user[]
+}
+
 model user{
   id String @map("_id") @id()
   name String @map("Name")
