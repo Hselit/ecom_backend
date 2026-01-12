@@ -1,6 +1,6 @@
 import {Router,Request,Response,NextFunction} from 'express';
 import container from '../../dependencyManager/inversify.config.js';
-import TYPES from '../../types/inversifyTypes.js';
+import TYPES from '../../dependencyManager/inversifyTypes.js';
 import { UserController } from '../controller/userController.js';
 
 const router = Router();

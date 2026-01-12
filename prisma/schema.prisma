@@ -3,47 +3,52 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model address{
-  id String @map("_id") @id
-  street1 String @map("Street1")
-  street2 String? @map("Street2")
-  city  String @map("City")
-  state String @map("State")
-  country String @map("Country")
-  lat Float @map("Lat")
-  lng Float @map("Lng")
-  userId String @map("UserID")
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  password    String
+  phoneNumber String   @unique
+  profile     String
+  gender      String
+  isActive    Boolean  @default(true)
 
-  user user[]
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id])
+
+  addresses Address[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model user{
-  id String @map("_id") @id()
-  name String @map("Name")
-  isActive Boolean @map("IsActive") @default(true)
-  password String @map("Password")
-  phoneNumber String @map("PhoneNumber")
-  profile String @map("Profile")
-  gender Boolean @map("Gender")
-  roleId String @map("RoleId")
-  addressId String @map("AddressID")
+model Address {
+  id       Int     @id @default(autoincrement())
+  street1  String
+  street2  String?
+  city     String
+  state    String
+  country  String
+  lat      Float?
+  lng      Float?
 
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
-  @@map("User")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model role{
-  id String @id @map("_id")
-  roleName String @map("RoleName")
-  isActive Boolean @map("IsActive")
-  createdAt DateTime @default(now()) @map("CreatedAt")
-  createdBy String @map("CreatedBy")
-  updatedBy String @map("UpdatedBy")
-  updatedAt DateTime @default(now()) @updatedAt() @map("UpdatedAt")
+model Role {
+  id        Int      @id @default(autoincrement())
+  roleName  String  @unique
+  isActive  Boolean @default(true)
 
-  @@map("Role")
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
