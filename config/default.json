@@ -1,0 +1,26 @@
+{
+  "port": 3000,
+  "jwt": {
+    "secret": "your-secret-key",
+    "expiresIn": "24h"
+  },
+  "openApi": {
+    "swagger": {
+      "customCss": ".swagger-ui .topbar { display: none }",
+      "customSiteTitle": "E-Commerce Backend API Documentation"
+    },
+    "openapi": "3.0.0",
+    "info": {
+      "swagger": "3.0.0",
+      "version": "1.0.0",
+      "title": "E-Commerce Backend API",
+      "description": "API documentation for E-Commerce Backend application"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000"
+      }
+    ]
+  }
+}
+

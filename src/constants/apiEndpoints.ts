@@ -1,0 +1,23 @@
+export const APIEndPoint = {
+  LOGIN: '/login',
+  CREATE_USER: '/user',
+  GET_USERS: '/user',
+  GET_USER_BY_ID: '/user/:id',
+  UPDATE_USER: '/user/:id',
+  DELETE_USER: '/user/:id',
+  GET_ROLES: '/role',
+  CREATE_ROLE: '/role',
+  DELETE_ROLE: '/role/:id',
+  CREATE_ACCESS_TYPE: '/access/type',
+  GET_ACCESS_TYPES: '/access/type',
+  GET_ACCESS_TYPE_BY_ID: '/access/type/:id',
+  UPDATE_ACCESS_TYPE: '/access/type/:id',
+  DELETE_ACCESS_TYPE: '/access/type/:id',
+  CREATE_ACCESS_ROLE: '/access/role',
+  GET_ACCESS_ROLES: '/access/role',
+  GET_ACCESS_ROLE_BY_ID: '/access/role/:id',
+  UPDATE_ACCESS_ROLE: '/access/role/:id',
+  DELETE_ACCESS_ROLE: '/access/role/:id',
+  ASSIGN_ACCESS_TO_ROLE: '/access/role/assign',
+} as const;
+

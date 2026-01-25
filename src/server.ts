@@ -1,3 +1,5 @@
+import "reflect-metadata"
+import "./zod-extend.js";
 import config from "config";
 import App from "./app";
 import logger from "./libs/logger";

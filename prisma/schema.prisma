@@ -10,6 +10,7 @@ datasource db {
 model User {
   id          Int      @id @default(autoincrement())
   name        String
+  email       String?  @unique
   password    String
   phoneNumber String   @unique
   profile     String
@@ -23,6 +24,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("user")
 }
 
 model Address {
@@ -40,6 +43,8 @@ model Address {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("address")
 }
 
 model Role {
@@ -48,7 +53,47 @@ model Role {
   isActive  Boolean @default(true)
 
   users User[]
+  accessRoles AccessRole[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("role")
+}
+
+model AccessType {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  code        String?  @unique
+  module      String?
+  action      String?
+
+  accessRoles AccessRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("accessType")
+}
+
+model AccessRole {
+  id           Int        @id @default(autoincrement())
+  roleId       Int
+  accessTypeId Int
+  canView      Boolean    @default(true)
+  canCreate    Boolean    @default(false)
+  canUpdate    Boolean    @default(false)
+  canDelete    Boolean    @default(false)
+  isActive      Boolean    @default(true)
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  accessType AccessType @relation(fields: [accessTypeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([roleId, accessTypeId])
+  @@map("accessRole")
 }
