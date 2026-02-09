@@ -4,6 +4,12 @@ import UserTypes from "./types/userType.js";
 import LoginTypes from "./types/loginType.js";
 import AccessTypes from "./types/accessType.js";
 import AccessRoleTypes from "./types/accessRoleType.js";
+import CategoryTypes from "./types/categoryType.js";
+import ProductTypes from "./types/productType.js";
+import ProductImageTypes from "./types/productImageType.js";
+import CartTypes from "./types/cartType.js";
+import OrderTypes from "./types/orderType.js";
+import ReviewTypes from "./types/reviewType.js";
 
 const TYPES = {
   ...LibsTypes,
@@ -11,7 +17,13 @@ const TYPES = {
   ...RoleTypes,
   ...LoginTypes,
   ...AccessTypes,
-  ...AccessRoleTypes
+  ...AccessRoleTypes,
+  ...CategoryTypes,
+  ...ProductTypes,
+  ...ProductImageTypes,
+  ...CartTypes,
+  ...OrderTypes,
+  ...ReviewTypes
 }
 
 export default TYPES;

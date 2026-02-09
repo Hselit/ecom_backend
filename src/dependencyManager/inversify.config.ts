@@ -15,6 +15,30 @@ import { AccessTypeController } from "../access/controller/accessTypeController.
 import { AccessRoleRepository } from "../access/repository/accessRoleRepository.js";
 import { AccessRoleService } from "../access/service/accessRoleService.js";
 import { AccessRoleController } from "../access/controller/accessRoleController.js";
+import { CategoryRepository } from "../category/repository/categoryRepository.js";
+import { CategoryService } from "../category/service/categoryService.js";
+import { CategoryController } from "../category/controller/categoryController.js";
+import { ProductRepository } from "../product/repository/productRepository.js";
+import { ProductService } from "../product/service/productService.js";
+import { ProductController } from "../product/controller/productController.js";
+import { ProductImageRepository } from "../productImage/repository/productImageRepository.js";
+import { ProductImageService } from "../productImage/service/productImageService.js";
+import { ProductImageController } from "../productImage/controller/productImageController.js";
+import { CartRepository } from "../cart/repository/cartRepository.js";
+import { CartService } from "../cart/service/cartService.js";
+import { CartController } from "../cart/controller/cartController.js";
+import { CartItemRepository } from "../cart/repository/cartItemRepository.js";
+import { CartItemService } from "../cart/service/cartItemService.js";
+import { CartItemController } from "../cart/controller/cartItemController.js";
+import { OrderRepository } from "../order/repository/orderRepository.js";
+import { OrderService } from "../order/service/orderService.js";
+import { OrderController } from "../order/controller/orderController.js";
+import { PaymentRepository } from "../order/repository/paymentRepository.js";
+import { PaymentService } from "../order/service/paymentService.js";
+import { PaymentController } from "../order/controller/paymentController.js";
+import { ReviewRepository } from "../review/repository/reviewRepository.js";
+import { ReviewService } from "../review/service/reviewService.js";
+import { ReviewController } from "../review/controller/reviewController.js";
 import { PrismaClient } from "@prisma/client";
 
 
@@ -48,6 +72,46 @@ container.bind<AccessTypeController>(TYPES.AccessTypeController).to(AccessTypeCo
 container.bind<AccessRoleRepository>(TYPES.AccessRoleRepository).to(AccessRoleRepository);
 container.bind<AccessRoleService>(TYPES.AccessRoleService).to(AccessRoleService);
 container.bind<AccessRoleController>(TYPES.AccessRoleController).to(AccessRoleController);
+
+//Category binding
+container.bind<CategoryRepository>(TYPES.CategoryRepository).to(CategoryRepository);
+container.bind<CategoryService>(TYPES.CategoryService).to(CategoryService);
+container.bind<CategoryController>(TYPES.CategoryController).to(CategoryController);
+
+//Product binding
+container.bind<ProductRepository>(TYPES.ProductRepository).to(ProductRepository);
+container.bind<ProductService>(TYPES.ProductService).to(ProductService);
+container.bind<ProductController>(TYPES.ProductController).to(ProductController);
+
+//ProductImage binding
+container.bind<ProductImageRepository>(TYPES.ProductImageRepository).to(ProductImageRepository);
+container.bind<ProductImageService>(TYPES.ProductImageService).to(ProductImageService);
+container.bind<ProductImageController>(TYPES.ProductImageController).to(ProductImageController);
+
+//Cart binding
+container.bind<CartRepository>(TYPES.CartRepository).to(CartRepository);
+container.bind<CartService>(TYPES.CartService).to(CartService);
+container.bind<CartController>(TYPES.CartController).to(CartController);
+
+//CartItem binding
+container.bind<CartItemRepository>(TYPES.CartItemRepository).to(CartItemRepository);
+container.bind<CartItemService>(TYPES.CartItemService).to(CartItemService);
+container.bind<CartItemController>(TYPES.CartItemController).to(CartItemController);
+
+//Order binding
+container.bind<OrderRepository>(TYPES.OrderRepository).to(OrderRepository);
+container.bind<OrderService>(TYPES.OrderService).to(OrderService);
+container.bind<OrderController>(TYPES.OrderController).to(OrderController);
+
+//Payment binding
+container.bind<PaymentRepository>(TYPES.PaymentRepository).to(PaymentRepository);
+container.bind<PaymentService>(TYPES.PaymentService).to(PaymentService);
+container.bind<PaymentController>(TYPES.PaymentController).to(PaymentController);
+
+//Review binding
+container.bind<ReviewRepository>(TYPES.ReviewRepository).to(ReviewRepository);
+container.bind<ReviewService>(TYPES.ReviewService).to(ReviewService);
+container.bind<ReviewController>(TYPES.ReviewController).to(ReviewController);
 
 
 

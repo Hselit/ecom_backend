@@ -19,5 +19,50 @@ export const APIEndPoint = {
   UPDATE_ACCESS_ROLE: '/access/role/:id',
   DELETE_ACCESS_ROLE: '/access/role/:id',
   ASSIGN_ACCESS_TO_ROLE: '/access/role/assign',
+  // Category endpoints
+  CREATE_CATEGORY: '/category',
+  GET_CATEGORIES: '/category',
+  GET_CATEGORY_BY_ID: '/category/:id',
+  UPDATE_CATEGORY: '/category/:id',
+  DELETE_CATEGORY: '/category/:id',
+  // Product endpoints
+  CREATE_PRODUCT: '/product',
+  GET_PRODUCTS: '/product',
+  GET_PRODUCT_BY_ID: '/product/:id',
+  UPDATE_PRODUCT: '/product/:id',
+  DELETE_PRODUCT: '/product/:id',
+  // ProductImage endpoints
+  CREATE_PRODUCT_IMAGE: '/product/:productId/image',
+  GET_PRODUCT_IMAGES: '/product/:productId/image',
+  GET_PRODUCT_IMAGE_BY_ID: '/product/image/:id',
+  UPDATE_PRODUCT_IMAGE: '/product/image/:id',
+  DELETE_PRODUCT_IMAGE: '/product/image/:id',
+  // Cart endpoints
+  GET_CART: '/cart',
+  CREATE_CART: '/cart',
+  UPDATE_CART: '/cart',
+  DELETE_CART: '/cart',
+  // CartItem endpoints
+  ADD_CART_ITEM: '/cart/item',
+  GET_CART_ITEMS: '/cart/item',
+  UPDATE_CART_ITEM: '/cart/item/:id',
+  DELETE_CART_ITEM: '/cart/item/:id',
+  // Order endpoints
+  CREATE_ORDER: '/order',
+  GET_ORDERS: '/order',
+  GET_ORDER_BY_ID: '/order/:id',
+  UPDATE_ORDER: '/order/:id',
+  DELETE_ORDER: '/order/:id',
+  // Payment endpoints
+  CREATE_PAYMENT: '/payment',
+  GET_PAYMENTS: '/payment',
+  GET_PAYMENT_BY_ID: '/payment/:id',
+  UPDATE_PAYMENT: '/payment/:id',
+  // Review endpoints
+  CREATE_REVIEW: '/review',
+  GET_REVIEWS: '/review',
+  GET_REVIEW_BY_ID: '/review/:id',
+  UPDATE_REVIEW: '/review/:id',
+  DELETE_REVIEW: '/review/:id',
 } as const;
 

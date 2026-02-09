@@ -10,6 +10,12 @@ import roleRoutes from "../src/role/routes/roleRoute"
 import loginRoutes from "../src/login/routes/loginRoute"
 import accessTypeRoutes from "../src/access/routes/accessTypeRoute"
 import accessRoleRoutes from "../src/access/routes/accessRoleRoute"
+import categoryRoutes from "../src/category/routes/categoryRoute"
+import productRoutes from "../src/product/routes/productRoute"
+import productImageRoutes from "../src/productImage/routes/productImageRoute"
+import cartRoutes from "../src/cart/routes/cartRoute"
+import orderRoutes from "../src/order/routes/orderRoute"
+import reviewRoutes from "../src/review/routes/reviewRoute"
 import { errorHandler } from './middleware/errorHandleMiddleware';
 import { authenticateToken } from './middleware/authMiddleware';
 
@@ -34,6 +40,12 @@ class App{
     this.app.use('/role', authenticateToken, roleRoutes);
     this.app.use('/access/type', authenticateToken, accessTypeRoutes);
     this.app.use('/access/role', authenticateToken, accessRoleRoutes);
+    this.app.use('/category', authenticateToken, categoryRoutes);
+    this.app.use('/product', authenticateToken, productRoutes);
+    this.app.use('/', authenticateToken, productImageRoutes);
+    this.app.use('/cart', authenticateToken, cartRoutes);
+    this.app.use('/order', authenticateToken, orderRoutes);
+    this.app.use('/review', authenticateToken, reviewRoutes);
 
     this.app.use(errorHandler);
   }
