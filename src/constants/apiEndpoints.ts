@@ -64,5 +64,11 @@ export const APIEndPoint = {
   GET_REVIEW_BY_ID: '/review/:id',
   UPDATE_REVIEW: '/review/:id',
   DELETE_REVIEW: '/review/:id',
+  // Inventory endpoints
+  CREATE_INVENTORY: '/inventory',
+  GET_INVENTORIES: '/inventory',
+  GET_INVENTORY_BY_ID: '/inventory/:id',
+  UPDATE_INVENTORY: '/inventory/:id',
+  DELETE_INVENTORY: '/inventory/:id',
 } as const;
 

@@ -12,5 +12,6 @@ export const EntityTags = {
   ORDERS: 'Orders',
   PAYMENTS: 'Payments',
   REVIEWS: 'Reviews',
+  INVENTORY: 'Inventory',
 } as const;
 

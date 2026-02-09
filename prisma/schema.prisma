@@ -141,6 +141,7 @@ model Product {
   cartItems CartItem[]
   orderItems OrderItem[]
   reviews  Review[]
+  inventory Inventory?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -157,6 +158,21 @@ model ProductImage {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("productImage")
+}
+
+model Inventory {
+  id              Int      @id @default(autoincrement())
+  quantity        Int
+  reservedQty     Int      @default(0)
+  isActive        Boolean  @default(true)
+
+  productId Int @unique
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("inventory")
 }
 
 /* =========================

@@ -10,6 +10,7 @@ import ProductImageTypes from "./types/productImageType.js";
 import CartTypes from "./types/cartType.js";
 import OrderTypes from "./types/orderType.js";
 import ReviewTypes from "./types/reviewType.js";
+import InventoryTypes from "./types/inventoryType.js";
 
 const TYPES = {
   ...LibsTypes,
@@ -23,7 +24,8 @@ const TYPES = {
   ...ProductImageTypes,
   ...CartTypes,
   ...OrderTypes,
-  ...ReviewTypes
+  ...ReviewTypes,
+  ...InventoryTypes
 }
 
 export default TYPES;

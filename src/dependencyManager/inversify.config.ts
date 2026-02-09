@@ -39,6 +39,9 @@ import { PaymentController } from "../order/controller/paymentController.js";
 import { ReviewRepository } from "../review/repository/reviewRepository.js";
 import { ReviewService } from "../review/service/reviewService.js";
 import { ReviewController } from "../review/controller/reviewController.js";
+import { InventoryRepository } from "../inventory/repository/inventoryRepository.js";
+import { InventoryService } from "../inventory/service/inventoryService.js";
+import { InventoryController } from "../inventory/controller/inventoryController.js";
 import { PrismaClient } from "@prisma/client";
 
 
@@ -112,6 +115,11 @@ container.bind<PaymentController>(TYPES.PaymentController).to(PaymentController)
 container.bind<ReviewRepository>(TYPES.ReviewRepository).to(ReviewRepository);
 container.bind<ReviewService>(TYPES.ReviewService).to(ReviewService);
 container.bind<ReviewController>(TYPES.ReviewController).to(ReviewController);
+
+//Inventory binding
+container.bind<InventoryRepository>(TYPES.InventoryRepository).to(InventoryRepository);
+container.bind<InventoryService>(TYPES.InventoryService).to(InventoryService);
+container.bind<InventoryController>(TYPES.InventoryController).to(InventoryController);
 
 
 

@@ -16,6 +16,7 @@ import productImageRoutes from "../src/productImage/routes/productImageRoute"
 import cartRoutes from "../src/cart/routes/cartRoute"
 import orderRoutes from "../src/order/routes/orderRoute"
 import reviewRoutes from "../src/review/routes/reviewRoute"
+import inventoryRoutes from "../src/inventory/routes/inventoryRoute"
 import { errorHandler } from './middleware/errorHandleMiddleware';
 import { authenticateToken } from './middleware/authMiddleware';
 
@@ -46,6 +47,7 @@ class App{
     this.app.use('/cart', authenticateToken, cartRoutes);
     this.app.use('/order', authenticateToken, orderRoutes);
     this.app.use('/review', authenticateToken, reviewRoutes);
+    this.app.use('/inventory', authenticateToken, inventoryRoutes);
 
     this.app.use(errorHandler);
   }

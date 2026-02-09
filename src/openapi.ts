@@ -23,6 +23,7 @@ import { routerAddCartItemSchema, routerGetCartItemsSchema, routerUpdateCartItem
 import { routerCreateOrderSchema, routerGetOrdersSchema, routerGetOrderByIdSchema, routerUpdateOrderSchema, routerDeleteOrderSchema } from './order/schema/orderRouteSchema.js';
 import { routerCreatePaymentSchema, routerGetPaymentsSchema, routerGetPaymentByIdSchema, routerUpdatePaymentSchema } from './order/schema/paymentRouteSchema.js';
 import { routerCreateReviewSchema, routerGetReviewsSchema, routerGetReviewByIdSchema, routerUpdateReviewSchema, routerDeleteReviewSchema } from './review/schema/reviewRouteSchema.js';
+import { routerCreateInventorySchema, routerGetInventoriesSchema, routerGetInventoryByIdSchema, routerUpdateInventorySchema, routerDeleteInventorySchema } from './inventory/schema/inventoryRouteSchema.js';
 import { CategoryDataSchema, CategoryResponseSchema, CategoryListResponseSchema } from './category/schema/categoryRouteSchema.js';
 import { ProductDataSchema, ProductResponseSchema, ProductListResponseSchema } from './product/schema/productRouteSchema.js';
 import { ProductImageDataSchema, ProductImageResponseSchema, ProductImageListResponseSchema } from './productImage/schema/productImageRouteSchema.js';
@@ -31,6 +32,7 @@ import { CartItemDataSchema, CartItemResponseSchema, CartItemListResponseSchema 
 import { OrderDataSchema, OrderResponseSchema, OrderListResponseSchema } from './order/schema/orderRouteSchema.js';
 import { PaymentDataSchema, PaymentResponseSchema, PaymentListResponseSchema } from './order/schema/paymentRouteSchema.js';
 import { ReviewDataSchema, ReviewResponseSchema, ReviewListResponseSchema } from './review/schema/reviewRouteSchema.js';
+import { InventoryDataSchema, InventoryResponseSchema, InventoryListResponseSchema } from './inventory/schema/inventoryRouteSchema.js';
 import { CreateCategoryBodySchema, UpdateCategoryBodySchema, GetCategoryQuerySchema, GetCategoryParamsSchema, UpdateCategoryParamsSchema, DeleteCategoryParamsSchema } from './category/dto/category.dto.js';
 import { CreateProductBodySchema, UpdateProductBodySchema, GetProductQuerySchema, GetProductParamsSchema, UpdateProductParamsSchema, DeleteProductParamsSchema } from './product/dto/product.dto.js';
 import { CreateProductImageBodySchema, UpdateProductImageBodySchema, GetProductImageParamsSchema, UpdateProductImageParamsSchema, DeleteProductImageParamsSchema, CreateProductImageParamsSchema, GetProductImagesByProductParamsSchema } from './productImage/dto/productImage.dto.js';
@@ -38,6 +40,7 @@ import { AddCartItemBodySchema, UpdateCartItemBodySchema, UpdateCartItemParamsSc
 import { CreateOrderBodySchema, UpdateOrderBodySchema, GetOrderQuerySchema, GetOrderParamsSchema, UpdateOrderParamsSchema, DeleteOrderParamsSchema } from './order/dto/order.dto.js';
 import { CreatePaymentBodySchema, UpdatePaymentBodySchema, GetPaymentQuerySchema, GetPaymentParamsSchema, UpdatePaymentParamsSchema } from './order/dto/payment.dto.js';
 import { CreateReviewBodySchema, UpdateReviewBodySchema, GetReviewQuerySchema, GetReviewParamsSchema, UpdateReviewParamsSchema, DeleteReviewParamsSchema } from './review/dto/review.dto.js';
+import { CreateInventoryBodySchema, UpdateInventoryBodySchema, GetInventoryQuerySchema, GetInventoryParamsSchema, UpdateInventoryParamsSchema, DeleteInventoryParamsSchema } from './inventory/dto/inventory.dto.js';
 
 type OpenApiConfig = {
   openapi: string;
@@ -99,6 +102,9 @@ export function generateOpenAPIDocument() {
   registry.register('ReviewResponse', ReviewResponseSchema);
   registry.register('ReviewListResponse', ReviewListResponseSchema);
   registry.register('ReviewData', ReviewDataSchema);
+  registry.register('InventoryResponse', InventoryResponseSchema);
+  registry.register('InventoryListResponse', InventoryListResponseSchema);
+  registry.register('InventoryData', InventoryDataSchema);
 
   // Register request schemas
   registry.register('LoginBody', LoginBodySchema);
@@ -164,6 +170,12 @@ export function generateOpenAPIDocument() {
   registry.register('GetReviewParams', GetReviewParamsSchema);
   registry.register('UpdateReviewParams', UpdateReviewParamsSchema);
   registry.register('DeleteReviewParams', DeleteReviewParamsSchema);
+  registry.register('CreateInventoryBody', CreateInventoryBodySchema);
+  registry.register('UpdateInventoryBody', UpdateInventoryBodySchema);
+  registry.register('GetInventoryQuery', GetInventoryQuerySchema);
+  registry.register('GetInventoryParams', GetInventoryParamsSchema);
+  registry.register('UpdateInventoryParams', UpdateInventoryParamsSchema);
+  registry.register('DeleteInventoryParams', DeleteInventoryParamsSchema);
 
   const registerRoute = (routeConfig: any) => {
     const pathConfig: any = {
@@ -247,6 +259,11 @@ export function generateOpenAPIDocument() {
   registerRoute(routerGetReviewByIdSchema);
   registerRoute(routerUpdateReviewSchema);
   registerRoute(routerDeleteReviewSchema);
+  registerRoute(routerCreateInventorySchema);
+  registerRoute(routerGetInventoriesSchema);
+  registerRoute(routerGetInventoryByIdSchema);
+  registerRoute(routerUpdateInventorySchema);
+  registerRoute(routerDeleteInventorySchema);
 
   registry.registerComponent('securitySchemes', 'BearerAuth', {
     type: 'http',
