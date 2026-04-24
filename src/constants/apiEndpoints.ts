@@ -1,6 +1,9 @@
 export const APIEndPoint = {
   LOGIN: '/login',
-  CREATE_USER: '/user',
+  CREATE_USER: '/user/register',
+  RESEND_VERIFICATION_CODE: '/user/verify/resend',
+  VERIFY_EMAIL: '/user/verify',
+  FORGOT_PASSWORD: '/user/forgot-password',
   GET_USERS: '/user',
   GET_USER_BY_ID: '/user/:id',
   UPDATE_USER: '/user/:id',

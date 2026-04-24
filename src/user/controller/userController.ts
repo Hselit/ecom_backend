@@ -13,14 +13,60 @@ export class UserController {
 
     async createUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const userId = req.userId;
-            if (!userId) {
-                throw new UnauthorizedError('User ID not found in token');
-            }
-
-            const user = await this.userService.createUser(userId, req.body);
+            const user = await this.userService.createUser(req.body);
             return res.status(HttpStatus.CREATED).json({
                 message: MESSAGE.USER_CREATED_SUCCESS,
+                data: user
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async resendVerificationCode(req: Request, res: Response, next: NextFunction) {
+        try {
+            const email = req.body.email;
+            if (!email) {
+                throw new BadRequestError('Email is required');
+            }
+            const result = await this.userService.resendVerificationCode(email);
+            return res.status(HttpStatus.OK).json({
+                message: MESSAGE.VERIFICATION_CODE_SENT_SUCCESS,
+                data: result
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async verifyEmail(req: Request, res: Response, next: NextFunction) {
+        try {
+            const email = req.body.email;
+            const code = req.body.code;
+            if (!email || !code) {
+                throw new BadRequestError('Email and verification code are required');
+            }
+            const user = await this.userService.verifyEmail(email, code);
+            return res.status(HttpStatus.OK).json({
+                message: MESSAGE.EMAIL_VERIFIED_SUCCESS,
+                data: user
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async forgotPassword(req: Request, res: Response, next: NextFunction) {
+        try {
+            const email = req.body.email;
+            const currentPassword = req.body.currentPassword;
+            const newPassword = req.body.newPassword;
+            if (!email || !currentPassword || !newPassword) {
+                throw new BadRequestError('Email, current password, and new password are required');
+            }
+            const user = await this.userService.forgotPassword(email, currentPassword, newPassword);
+            return res.status(HttpStatus.OK).json({
+                message: MESSAGE.PASSWORD_RESET_SUCCESS,
                 data: user
             });
         } catch (error) {
@@ -52,7 +98,11 @@ export class UserController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const targetUserId = parseInt(req.params.id);
+            const idParam = req.params.id;
+            if (!idParam) {
+                throw new BadRequestError('User ID is required');
+            }
+            const targetUserId = parseInt(idParam);
             if (isNaN(targetUserId)) {
                 throw new BadRequestError('Invalid user ID');
             }
@@ -74,7 +124,11 @@ export class UserController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const targetUserId = parseInt(req.params.id);
+            const idParam = req.params.id;
+            if (!idParam) {
+                throw new BadRequestError('User ID is required');
+            }
+            const targetUserId = parseInt(idParam);
             if (isNaN(targetUserId)) {
                 throw new BadRequestError('Invalid user ID');
             }
@@ -96,7 +150,11 @@ export class UserController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const targetUserId = parseInt(req.params.id);
+            const idParam = req.params.id;
+            if (!idParam) {
+                throw new BadRequestError('User ID is required');
+            }
+            const targetUserId = parseInt(idParam);
             if (isNaN(targetUserId)) {
                 throw new BadRequestError('Invalid user ID');
             }

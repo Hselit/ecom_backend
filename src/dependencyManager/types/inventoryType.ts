@@ -6,3 +6,4 @@ const InventoryTypes = {
 
 export default InventoryTypes;
 
+

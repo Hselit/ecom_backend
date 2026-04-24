@@ -19,6 +19,7 @@ import reviewRoutes from "../src/review/routes/reviewRoute"
 import inventoryRoutes from "../src/inventory/routes/inventoryRoute"
 import { errorHandler } from './middleware/errorHandleMiddleware';
 import { authenticateToken } from './middleware/authMiddleware';
+import { rateLimiterMiddleware } from './middleware/rateLimiterMiddleware';
 
 class App{
 
@@ -35,9 +36,11 @@ class App{
         config.get<object>('openApi.swagger')
       )
     );
+
+    this.app.use(rateLimiterMiddleware)
     
     this.app.use('/login', loginRoutes);
-    this.app.use('/user', authenticateToken, userRoutes);
+    this.app.use('/user', userRoutes); // Public routes for registration and verification, protected routes handled in route file
     this.app.use('/role', authenticateToken, roleRoutes);
     this.app.use('/access/type', authenticateToken, accessTypeRoutes);
     this.app.use('/access/role', authenticateToken, accessRoleRoutes);

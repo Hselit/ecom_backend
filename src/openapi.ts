@@ -1,7 +1,7 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import config from 'config';
 import { routerLoginSchema } from './login/schema/loginRouteSchema.js';
-import { routerCreateUserSchema, routerGetUsersSchema, routerGetUserByIdSchema, routerUpdateUserSchema, routerDeleteUserSchema } from './user/schema/userRouteSchema.js';
+import { routerCreateUserSchema, routerGetUsersSchema, routerGetUserByIdSchema, routerUpdateUserSchema, routerDeleteUserSchema, routerResendVerificationCodeSchema, routerVerifyEmailSchema, routerForgotPasswordSchema, VerificationResponseSchema } from './user/schema/userRouteSchema.js';
 import { routerGetRolesSchema, routerCreateRoleSchema, routerDeleteRoleSchema } from './role/schema/roleRouteSchema.js';
 import { routerCreateAccessTypeSchema, routerGetAccessTypesSchema, routerGetAccessTypeByIdSchema, routerUpdateAccessTypeSchema, routerDeleteAccessTypeSchema } from './access/schema/accessTypeRouteSchema.js';
 import { routerCreateAccessRoleSchema, routerGetAccessRolesSchema, routerGetAccessRoleByIdSchema, routerUpdateAccessRoleSchema, routerDeleteAccessRoleSchema, routerAssignAccessToRoleSchema } from './access/schema/accessRoleRouteSchema.js';
@@ -11,7 +11,7 @@ import { RoleResponseSchema, RoleListResponseSchema, RoleDataSchema } from './ro
 import { AccessTypeResponseSchema, AccessTypeListResponseSchema, AccessTypeDataSchema } from './access/schema/accessTypeRouteSchema.js';
 import { AccessRoleResponseSchema, AccessRoleListResponseSchema, AssignAccessToRoleResponseSchema, AccessRoleDataSchema, AccessRoleRoleSchema, AccessRoleAccessTypeSchema } from './access/schema/accessRoleRouteSchema.js';
 import { LoginBodySchema } from './login/dto/login.dto.js';
-import { CreateUserBodySchema, UpdateUserBodySchema, GetUserQuerySchema, GetUserParamsSchema, UpdateUserParamsSchema, DeleteUserParamsSchema } from './user/dto/user.dto.js';
+import { CreateUserBodySchema, UpdateUserBodySchema, GetUserQuerySchema, GetUserParamsSchema, UpdateUserParamsSchema, DeleteUserParamsSchema, ResendVerificationCodeBodySchema, VerifyEmailBodySchema, ForgotPasswordBodySchema } from './user/dto/user.dto.js';
 import { CreateRoleBodySchema, GetRolesQuerySchema, DeleteRoleParamsSchema } from './role/dto/role.dto.js';
 import { CreateAccessTypeBodySchema, UpdateAccessTypeBodySchema, GetAccessTypeQuerySchema, GetAccessTypeParamsSchema, UpdateAccessTypeParamsSchema, DeleteAccessTypeParamsSchema } from './access/dto/accessType.dto.js';
 import { CreateAccessRoleBodySchema, UpdateAccessRoleBodySchema, GetAccessRoleQuerySchema, GetAccessRoleParamsSchema, UpdateAccessRoleParamsSchema, DeleteAccessRoleParamsSchema, AssignAccessToRoleBodySchema } from './access/dto/accessRole.dto.js';
@@ -67,6 +67,7 @@ export function generateOpenAPIDocument() {
   registry.register('UserListResponse', UserListResponseSchema);
   registry.register('UserData', UserDataSchema);
   registry.register('UserRole', UserRoleSchema);
+  registry.register('VerificationResponse', VerificationResponseSchema);
   registry.register('RoleResponse', RoleResponseSchema);
   registry.register('RoleListResponse', RoleListResponseSchema);
   registry.register('RoleData', RoleDataSchema);
@@ -110,6 +111,9 @@ export function generateOpenAPIDocument() {
   registry.register('LoginBody', LoginBodySchema);
   registry.register('CreateUserBody', CreateUserBodySchema);
   registry.register('UpdateUserBody', UpdateUserBodySchema);
+  registry.register('ResendVerificationCodeBody', ResendVerificationCodeBodySchema);
+  registry.register('VerifyEmailBody', VerifyEmailBodySchema);
+  registry.register('ForgotPasswordBody', ForgotPasswordBodySchema);
   registry.register('GetUserQuery', GetUserQuerySchema);
   registry.register('GetUserParams', GetUserParamsSchema);
   registry.register('UpdateUserParams', UpdateUserParamsSchema);
@@ -206,6 +210,9 @@ export function generateOpenAPIDocument() {
 
   registerRoute(routerLoginSchema);
   registerRoute(routerCreateUserSchema);
+  registerRoute(routerResendVerificationCodeSchema);
+  registerRoute(routerVerifyEmailSchema);
+  registerRoute(routerForgotPasswordSchema);
   registerRoute(routerGetUsersSchema);
   registerRoute(routerGetUserByIdSchema);
   registerRoute(routerUpdateUserSchema);

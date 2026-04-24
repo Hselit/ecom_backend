@@ -59,6 +59,33 @@ export const deleteUserParamsDto = z.object({
   params: DeleteUserParamsSchema
 }).openapi('DeleteUserParamsDto');
 
+export const ResendVerificationCodeBodySchema = z.object({
+  email: z.string().email('Invalid email address').openapi({ example: 'john@example.com' })
+}).openapi('ResendVerificationCodeBody');
+
+export const resendVerificationCodeDto = z.object({
+  body: ResendVerificationCodeBodySchema
+}).openapi('ResendVerificationCodeDto');
+
+export const VerifyEmailBodySchema = z.object({
+  email: z.string().email('Invalid email address').openapi({ example: 'john@example.com' }),
+  code: z.string().length(6, 'Verification code must be 6 digits').openapi({ example: '123456' })
+}).openapi('VerifyEmailBody');
+
+export const verifyEmailDto = z.object({
+  body: VerifyEmailBodySchema
+}).openapi('VerifyEmailDto');
+
+export const ForgotPasswordBodySchema = z.object({
+  email: z.string().email('Invalid email address').openapi({ example: 'john@example.com' }),
+  currentPassword: z.string().min(6, 'Current password must be at least 6 characters').openapi({ example: 'currentpass123' }),
+  newPassword: z.string().min(6, 'New password must be at least 6 characters').openapi({ example: 'newpass123' })
+}).openapi('ForgotPasswordBody');
+
+export const forgotPasswordDto = z.object({
+  body: ForgotPasswordBodySchema
+}).openapi('ForgotPasswordDto');
+
 export type CreateUserDto = z.infer<typeof CreateUserBodySchema>;
 export type UpdateUserDto = z.infer<typeof UpdateUserBodySchema>;
 

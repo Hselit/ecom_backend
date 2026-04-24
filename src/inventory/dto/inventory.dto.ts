@@ -55,3 +55,4 @@ export const deleteInventoryParamsDto = z.object({
 export type CreateInventoryDto = z.infer<typeof CreateInventoryBodySchema>;
 export type UpdateInventoryDto = z.infer<typeof UpdateInventoryBodySchema>;
 
+

@@ -8,14 +8,17 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  name        String
-  email       String?  @unique
-  password    String
-  phoneNumber String   @unique
-  profile     String
-  gender      String
-  isActive    Boolean  @default(true)
+  id                Int      @id @default(autoincrement())
+  name              String
+  email             String?  @unique
+  password          String
+  phoneNumber       String   @unique
+  profile           String
+  gender            String
+  isActive          Boolean  @default(true)
+  isEmailVerified   Boolean  @default(false)
+  verificationCode  String?
+  verificationCodeExpiry DateTime?
 
   roleId Int
   role   Role @relation(fields: [roleId], references: [id])

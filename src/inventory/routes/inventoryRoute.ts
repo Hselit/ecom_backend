@@ -21,3 +21,4 @@ router.delete("/:id", validatorMiddleware(deleteInventoryParamsDto), (req,res,ne
 
 export default router;
 
+

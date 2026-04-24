@@ -14,7 +14,7 @@ export class UserRepository {
         this.prisma = prisma;
     }
 
-    async createUser(payload: CreateUserDto & { password: string }) {
+    async createUser(payload: CreateUserDto & { password: string; verificationCode?: string; verificationCodeExpiry?: Date }) {
         try {
             const user = await this.prisma.user.create({
                 data: {
@@ -25,7 +25,10 @@ export class UserRepository {
                     profile: payload.profile,
                     gender: payload.gender,
                     roleId: payload.roleId,
-                    isActive: payload.isActive ?? true
+                    isActive: payload.isActive ?? true,
+                    isEmailVerified: false,
+                    verificationCode: payload.verificationCode,
+                    verificationCodeExpiry: payload.verificationCodeExpiry
                 },
                 include: {
                     role: true
@@ -50,6 +53,95 @@ export class UserRepository {
                 throw error;
             }
             throw new DatabaseError('Failed to create user');
+        }
+    }
+
+    async updateVerificationCode(email: string, verificationCode: string, expiry: Date) {
+        try {
+            const user = await this.prisma.user.update({
+                where: { email },
+                data: {
+                    verificationCode,
+                    verificationCodeExpiry: expiry
+                }
+            });
+            return user;
+        } catch (error: any) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                throw new DatabaseError(error.message);
+            }
+            throw new DatabaseError('Failed to update verification code');
+        }
+    }
+
+    async verifyEmail(email: string, code: string) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: { email }
+            });
+
+            if (!user) {
+                throw new NotFoundError('User not found');
+            }
+
+            if (user.isEmailVerified) {
+                throw new BadRequestError('Email is already verified');
+            }
+
+            if (!user.verificationCode || user.verificationCode !== code) {
+                throw new BadRequestError('Invalid verification code');
+            }
+
+            if (!user.verificationCodeExpiry || user.verificationCodeExpiry < new Date()) {
+                throw new BadRequestError('Verification code has expired');
+            }
+
+            const updatedUser = await this.prisma.user.update({
+                where: { email },
+                data: {
+                    isEmailVerified: true,
+                    verificationCode: null,
+                    verificationCodeExpiry: null
+                },
+                include: {
+                    role: true
+                }
+            });
+
+            return updatedUser;
+        } catch (error: any) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                throw new DatabaseError(error.message);
+            }
+            if (error instanceof BadRequestError || error instanceof NotFoundError) {
+                throw error;
+            }
+            throw new DatabaseError('Failed to verify email');
+        }
+    }
+
+    async findUserByEmail(email: string) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: { email },
+                include: {
+                    role: true
+                }
+            });
+
+            if (!user) {
+                throw new NotFoundError('User not found');
+            }
+
+            return user;
+        } catch (error: any) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                throw new DatabaseError(error.message);
+            }
+            if (error instanceof NotFoundError) {
+                throw error;
+            }
+            throw new DatabaseError('Failed to find user');
         }
     }
 
@@ -211,6 +303,38 @@ export class UserRepository {
                 throw error;
             }
             throw new DatabaseError('Failed to fetch user role');
+        }
+    }
+
+    async updatePassword(email: string, newPassword: string) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: { email }
+            });
+
+            if (!user) {
+                throw new NotFoundError('User not found');
+            }
+
+            const updatedUser = await this.prisma.user.update({
+                where: { email },
+                data: {
+                    password: newPassword
+                },
+                include: {
+                    role: true
+                }
+            });
+
+            return updatedUser;
+        } catch (error: any) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                throw new DatabaseError(error.message);
+            }
+            if (error instanceof NotFoundError) {
+                throw error;
+            }
+            throw new DatabaseError('Failed to update password');
         }
     }
 }
