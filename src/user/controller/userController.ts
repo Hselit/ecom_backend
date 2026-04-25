@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class UserController {
@@ -81,7 +82,7 @@ export class UserController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const users = await this.userService.getUserList(userId, req.query as any);
+            const users = await this.userService.getUserList(userId, validatedQuery(req) as any);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.USER_FETCHED_SUCCESS,
                 data: users
@@ -98,7 +99,7 @@ export class UserController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const idParam = req.params.id;
+            const idParam = validatedParams(req).id;
             if (!idParam) {
                 throw new BadRequestError('User ID is required');
             }
@@ -124,7 +125,7 @@ export class UserController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const idParam = req.params.id;
+            const idParam = validatedParams(req).id;
             if (!idParam) {
                 throw new BadRequestError('User ID is required');
             }
@@ -150,7 +151,7 @@ export class UserController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const idParam = req.params.id;
+            const idParam = validatedParams(req).id;
             if (!idParam) {
                 throw new BadRequestError('User ID is required');
             }

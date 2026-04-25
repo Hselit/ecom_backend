@@ -20,7 +20,7 @@ import inventoryRoutes from "../src/inventory/routes/inventoryRoute"
 import { errorHandler } from './middleware/errorHandleMiddleware';
 import { authenticateToken } from './middleware/authMiddleware';
 import { rateLimiterMiddleware } from './middleware/rateLimiterMiddleware';
-
+import cors from 'cors';
 class App{
 
   private static server:Server;
@@ -28,6 +28,14 @@ class App{
 
   private static async setupRoutes(){
     
+    this.app.use(
+      cors({
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true
+      })
+    );
+
     this.app.use(
       '/api-docs',
       swaggerUi.serve,
@@ -37,11 +45,11 @@ class App{
       )
     );
 
-    this.app.use(rateLimiterMiddleware)
+    // this.app.use(rateLimiterMiddleware)
     
     this.app.use('/login', loginRoutes);
     this.app.use('/user', userRoutes); // Public routes for registration and verification, protected routes handled in route file
-    this.app.use('/role', authenticateToken, roleRoutes);
+    this.app.use('/role', roleRoutes);
     this.app.use('/access/type', authenticateToken, accessTypeRoutes);
     this.app.use('/access/role', authenticateToken, accessRoleRoutes);
     this.app.use('/category', authenticateToken, categoryRoutes);

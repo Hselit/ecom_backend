@@ -32,7 +32,11 @@ async function main() {
     logger.info('✅ All seeds executed successfully');
     process.exit(0);
   } catch (err) {
-    logger.error('❌ Seeding failed', err);
+    const detail =
+      err instanceof Error
+        ? `${err.name}: ${err.message}${err.stack ? `\n${err.stack}` : ''}`
+        : String(err);
+    logger.error(`Seeding failed: ${detail}`);
     process.exit(1);
   }
 }

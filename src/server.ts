@@ -10,7 +10,11 @@ async function main() {
   try {
     await App.startServer(PORT);
   } catch (error) {
-    logger.error('Failed to start the server:', error);
+    const detail =
+      error instanceof Error
+        ? `${error.name}: ${error.message}${error.stack ? `\n${error.stack}` : ''}`
+        : String(error);
+    logger.error(`Failed to start the server: ${detail}`);
     process.exit(1);
   }
 }

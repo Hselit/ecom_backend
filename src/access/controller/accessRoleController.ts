@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class AccessRoleController {
@@ -35,7 +36,7 @@ export class AccessRoleController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const accessRoles = await this.accessRoleService.getAccessRoleList(userId, req.query as any);
+            const accessRoles = await this.accessRoleService.getAccessRoleList(userId, validatedQuery(req) as any);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.ACCESS_ROLE_FETCHED_SUCCESS,
                 data: accessRoles
@@ -52,7 +53,7 @@ export class AccessRoleController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const id = req.params.id as unknown as number;
+            const id = validatedParams(req).id as unknown as number;
             if (!id || isNaN(Number(id))) {
                 throw new BadRequestError('Invalid access role ID');
             }
@@ -74,7 +75,7 @@ export class AccessRoleController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const id = req.params.id as unknown as number;
+            const id = validatedParams(req).id as unknown as number;
             if (!id || isNaN(Number(id))) {
                 throw new BadRequestError('Invalid access role ID');
             }
@@ -96,7 +97,7 @@ export class AccessRoleController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const id = req.params.id as unknown as number;
+            const id = validatedParams(req).id as unknown as number;
             if (!id || isNaN(Number(id))) {
                 throw new BadRequestError('Invalid access role ID');
             }

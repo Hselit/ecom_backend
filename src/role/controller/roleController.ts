@@ -4,8 +4,8 @@ import { RoleService } from "../service/roleService";
 import { Response,Request, NextFunction } from "express";
 import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
-import { createRoleDto } from "../dto/role.dto";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class RoleController{
@@ -14,7 +14,7 @@ export class RoleController{
 
     async getRoles(req:Request,res:Response,next:NextFunction){
         try {
-            const rolePayload = req.query as any;
+            const rolePayload = validatedQuery(req) as any;
             const roleList = await this.roleService.getRoleList(rolePayload);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.ROLE_SUCCESS,
@@ -53,7 +53,7 @@ export class RoleController{
             }
 
             // Params are already validated by middleware
-            const roleId = req.params.id as unknown as number;
+            const roleId = validatedParams(req).id as unknown as number;
             
             const deletedRole = await this.roleService.deleteRole(userId, roleId);
             return res.status(HttpStatus.OK).json({

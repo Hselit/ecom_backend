@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class InventoryController {
@@ -35,7 +36,7 @@ export class InventoryController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const inventories = await this.inventoryService.getInventoryList(userId, req.query as any);
+            const inventories = await this.inventoryService.getInventoryList(userId, validatedQuery(req) as any);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.INVENTORY_FETCHED_SUCCESS,
                 data: inventories
@@ -52,7 +53,7 @@ export class InventoryController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const inventoryId = parseInt(req.params.id);
+            const inventoryId = parseInt(String(validatedParams(req).id));
             if (isNaN(inventoryId)) {
                 throw new BadRequestError('Invalid inventory ID');
             }
@@ -74,7 +75,7 @@ export class InventoryController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const inventoryId = parseInt(req.params.id);
+            const inventoryId = parseInt(String(validatedParams(req).id));
             if (isNaN(inventoryId)) {
                 throw new BadRequestError('Invalid inventory ID');
             }
@@ -96,7 +97,7 @@ export class InventoryController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const inventoryId = parseInt(req.params.id);
+            const inventoryId = parseInt(String(validatedParams(req).id));
             if (isNaN(inventoryId)) {
                 throw new BadRequestError('Invalid inventory ID');
             }

@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class AccessTypeController {
@@ -35,7 +36,7 @@ export class AccessTypeController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const accessTypes = await this.accessTypeService.getAccessTypeList(userId, req.query as any);
+            const accessTypes = await this.accessTypeService.getAccessTypeList(userId, validatedQuery(req) as any);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.ACCESS_TYPE_FETCHED_SUCCESS,
                 data: accessTypes
@@ -52,7 +53,7 @@ export class AccessTypeController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const id = req.params.id as unknown as number;
+            const id = validatedParams(req).id as unknown as number;
             if (!id || isNaN(Number(id))) {
                 throw new BadRequestError('Invalid access type ID');
             }
@@ -74,7 +75,7 @@ export class AccessTypeController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const id = req.params.id as unknown as number;
+            const id = validatedParams(req).id as unknown as number;
             if (!id || isNaN(Number(id))) {
                 throw new BadRequestError('Invalid access type ID');
             }
@@ -96,7 +97,7 @@ export class AccessTypeController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const id = req.params.id as unknown as number;
+            const id = validatedParams(req).id as unknown as number;
             if (!id || isNaN(Number(id))) {
                 throw new BadRequestError('Invalid access type ID');
             }

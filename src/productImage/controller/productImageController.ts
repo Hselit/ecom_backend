@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class ProductImageController {
@@ -18,7 +19,7 @@ export class ProductImageController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const productId = parseInt(req.params.productId);
+            const productId = parseInt(String(validatedParams(req).productId));
             if (isNaN(productId)) {
                 throw new BadRequestError('Invalid product ID');
             }
@@ -35,7 +36,7 @@ export class ProductImageController {
 
     async getProductImages(req: Request, res: Response, next: NextFunction) {
         try {
-            const productId = parseInt(req.params.productId);
+            const productId = parseInt(String(validatedParams(req).productId));
             if (isNaN(productId)) {
                 throw new BadRequestError('Invalid product ID');
             }
@@ -52,7 +53,7 @@ export class ProductImageController {
 
     async getProductImageById(req: Request, res: Response, next: NextFunction) {
         try {
-            const imageId = parseInt(req.params.id);
+            const imageId = parseInt(String(validatedParams(req).id));
             if (isNaN(imageId)) {
                 throw new BadRequestError('Invalid image ID');
             }
@@ -74,7 +75,7 @@ export class ProductImageController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const imageId = parseInt(req.params.id);
+            const imageId = parseInt(String(validatedParams(req).id));
             if (isNaN(imageId)) {
                 throw new BadRequestError('Invalid image ID');
             }
@@ -96,7 +97,7 @@ export class ProductImageController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const imageId = parseInt(req.params.id);
+            const imageId = parseInt(String(validatedParams(req).id));
             if (isNaN(imageId)) {
                 throw new BadRequestError('Invalid image ID');
             }

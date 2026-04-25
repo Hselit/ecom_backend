@@ -111,7 +111,6 @@ model AccessRole {
 model Category {
   id          Int      @id @default(autoincrement())
   name        String
-  slug        String   @unique
   description String?
   isActive    Boolean  @default(true)
 
@@ -130,11 +129,8 @@ model Category {
 model Product {
   id          Int      @id @default(autoincrement())
   name        String
-  slug        String   @unique
   description String?
-  sku         String   @unique
   price       Float
-  stock       Int
   isActive    Boolean  @default(true)
 
   categoryId Int

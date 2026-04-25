@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class CategoryController {
@@ -30,7 +31,7 @@ export class CategoryController {
 
     async getCategories(req: Request, res: Response, next: NextFunction) {
         try {
-            const categories = await this.categoryService.getCategoryList(req.query as any);
+            const categories = await this.categoryService.getCategoryList(validatedQuery(req) as any);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.CATEGORY_FETCHED_SUCCESS,
                 data: categories
@@ -42,7 +43,7 @@ export class CategoryController {
 
     async getCategoryById(req: Request, res: Response, next: NextFunction) {
         try {
-            const categoryId = parseInt(req.params.id);
+            const categoryId = parseInt(String(validatedParams(req).id));
             if (isNaN(categoryId)) {
                 throw new BadRequestError('Invalid category ID');
             }
@@ -64,7 +65,7 @@ export class CategoryController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const categoryId = parseInt(req.params.id);
+            const categoryId = parseInt(String(validatedParams(req).id));
             if (isNaN(categoryId)) {
                 throw new BadRequestError('Invalid category ID');
             }
@@ -86,7 +87,7 @@ export class CategoryController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const categoryId = parseInt(req.params.id);
+            const categoryId = parseInt(String(validatedParams(req).id));
             if (isNaN(categoryId)) {
                 throw new BadRequestError('Invalid category ID');
             }

@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class ReviewController {
@@ -30,7 +31,7 @@ export class ReviewController {
 
     async getReviews(req: Request, res: Response, next: NextFunction) {
         try {
-            const reviews = await this.reviewService.getReviewList(req.query as any);
+            const reviews = await this.reviewService.getReviewList(validatedQuery(req) as any);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.REVIEW_FETCHED_SUCCESS,
                 data: reviews
@@ -42,7 +43,7 @@ export class ReviewController {
 
     async getReviewById(req: Request, res: Response, next: NextFunction) {
         try {
-            const reviewId = parseInt(req.params.id);
+            const reviewId = parseInt(String(validatedParams(req).id));
             if (isNaN(reviewId)) {
                 throw new BadRequestError('Invalid review ID');
             }
@@ -64,7 +65,7 @@ export class ReviewController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const reviewId = parseInt(req.params.id);
+            const reviewId = parseInt(String(validatedParams(req).id));
             if (isNaN(reviewId)) {
                 throw new BadRequestError('Invalid review ID');
             }
@@ -86,7 +87,7 @@ export class ReviewController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const reviewId = parseInt(req.params.id);
+            const reviewId = parseInt(String(validatedParams(req).id));
             if (isNaN(reviewId)) {
                 throw new BadRequestError('Invalid review ID');
             }

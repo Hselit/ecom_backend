@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class CartItemController {
@@ -52,7 +53,7 @@ export class CartItemController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const itemId = parseInt(req.params.id);
+            const itemId = parseInt(String(validatedParams(req).id));
             if (isNaN(itemId)) {
                 throw new BadRequestError('Invalid cart item ID');
             }
@@ -74,7 +75,7 @@ export class CartItemController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const itemId = parseInt(req.params.id);
+            const itemId = parseInt(String(validatedParams(req).id));
             if (isNaN(itemId)) {
                 throw new BadRequestError('Invalid cart item ID');
             }

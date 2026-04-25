@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class PaymentController {
@@ -35,7 +36,7 @@ export class PaymentController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const payments = await this.paymentService.getPaymentList(userId, req.query as any);
+            const payments = await this.paymentService.getPaymentList(userId, validatedQuery(req) as any);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.PAYMENT_FETCHED_SUCCESS,
                 data: payments
@@ -52,7 +53,7 @@ export class PaymentController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const paymentId = parseInt(req.params.id);
+            const paymentId = parseInt(String(validatedParams(req).id));
             if (isNaN(paymentId)) {
                 throw new BadRequestError('Invalid payment ID');
             }
@@ -74,7 +75,7 @@ export class PaymentController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const paymentId = parseInt(req.params.id);
+            const paymentId = parseInt(String(validatedParams(req).id));
             if (isNaN(paymentId)) {
                 throw new BadRequestError('Invalid payment ID');
             }

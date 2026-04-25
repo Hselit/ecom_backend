@@ -4,6 +4,16 @@
     "secret": "your-secret-key",
     "expiresIn": "24h"
   },
+  "email": {
+    "host": "smtp.example.com",
+    "port": 587,
+    "secure": false,
+    "auth": {
+      "user": "",
+      "pass": ""
+    },
+    "from": "noreply@example.com"
+  },
   "openApi": {
     "swagger": {
       "customCss": ".swagger-ui .topbar { display: none }",

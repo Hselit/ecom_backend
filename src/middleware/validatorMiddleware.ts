@@ -10,12 +10,30 @@ const validatorMiddleware =
         query: req.query,
         params: req.params,
       });
-      
-      // Update request object with validated/transformed data
-      if (validatedData.body) req.body = validatedData.body;
-      if (validatedData.query) req.query = validatedData.query;
-      if (validatedData.params) req.params = validatedData.params;
-      
+
+      req.validated = req.validated ?? {};
+
+      if (validatedData.body !== undefined) {
+        req.validated.body = validatedData.body;
+        req.body = validatedData.body;
+      }
+      if (validatedData.query !== undefined) {
+        req.validated.query = validatedData.query;
+        try {
+          Object.assign(req.query as object, validatedData.query as object);
+        } catch {
+          // Express 5: `req.query` is a getter-only property; use `validatedQuery(req)`.
+        }
+      }
+      if (validatedData.params !== undefined) {
+        req.validated.params = validatedData.params as Request['params'];
+        try {
+          Object.assign(req.params, validatedData.params as object);
+        } catch {
+          // If in-place assign fails, handlers should use `validatedParams(req)`.
+        }
+      }
+
       next();
     } catch (error) {
       next(error);

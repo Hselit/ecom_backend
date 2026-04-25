@@ -1,19 +1,8 @@
 import nodemailer from 'nodemailer';
-import config from 'config';
+import appConfig from '../../config/appConfig.js';
 import logger from './logger.js';
 
-type EmailConfig = {
-  host: string;
-  port: number;
-  secure: boolean;
-  auth: {
-    user: string;
-    pass: string;
-  };
-  from: string;
-};
-
-const emailConfig = config.get<EmailConfig>('email');
+const emailConfig = appConfig.email;
 
 // Create transporter
 const transporter = nodemailer.createTransport({
@@ -48,7 +37,9 @@ export async function sendVerificationEmail(email: string, verificationCode: str
     await transporter.sendMail(mailOptions);
     logger.info(`Verification email sent to ${email}`);
   } catch (error) {
-    logger.error('Failed to send verification email:', error);
+    const detail =
+      error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+    logger.error(`Failed to send verification email: ${detail}`);
     throw new Error('Failed to send verification email');
   }
 }

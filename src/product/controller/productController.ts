@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class ProductController {
@@ -30,7 +31,7 @@ export class ProductController {
 
     async getProducts(req: Request, res: Response, next: NextFunction) {
         try {
-            const products = await this.productService.getProductList(req.query as any);
+            const products = await this.productService.getProductList(validatedQuery(req) as any);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.PRODUCT_FETCHED_SUCCESS,
                 data: products
@@ -42,7 +43,7 @@ export class ProductController {
 
     async getProductById(req: Request, res: Response, next: NextFunction) {
         try {
-            const productId = parseInt(req.params.id);
+            const productId = parseInt(String(validatedParams(req).id));
             if (isNaN(productId)) {
                 throw new BadRequestError('Invalid product ID');
             }
@@ -64,7 +65,7 @@ export class ProductController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const productId = parseInt(req.params.id);
+            const productId = parseInt(String(validatedParams(req).id));
             if (isNaN(productId)) {
                 throw new BadRequestError('Invalid product ID');
             }
@@ -86,7 +87,7 @@ export class ProductController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const productId = parseInt(req.params.id);
+            const productId = parseInt(String(validatedParams(req).id));
             if (isNaN(productId)) {
                 throw new BadRequestError('Invalid product ID');
             }

@@ -10,7 +10,13 @@ export function errorHandler(
   res: Response,
   _next: NextFunction,
 ) {
-  logger.error(err);
+  if (err instanceof Error) {
+    logger.error(
+      `${err.name}: ${err.message}${err.stack ? `\n${err.stack}` : ''}`,
+    );
+  } else {
+    logger.error(`Request handler error: ${String(err)}`);
+  }
 
   // Zod validation errors
  if (err instanceof ZodError) {

@@ -6,6 +6,7 @@ import { HttpStatus } from "../../constants/common";
 import { MESSAGE } from "../../constants/messages";
 import { UnauthorizedError } from "../../error/unAuthorizedError";
 import { BadRequestError } from "../../error/badRequestError";
+import { validatedParams, validatedQuery } from "../../middleware/validatedRequest.js";
 
 @injectable()
 export class OrderController {
@@ -35,7 +36,7 @@ export class OrderController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const orders = await this.orderService.getOrderList(userId, req.query as any);
+            const orders = await this.orderService.getOrderList(userId, validatedQuery(req) as any);
             return res.status(HttpStatus.OK).json({
                 message: MESSAGE.ORDER_FETCHED_SUCCESS,
                 data: orders
@@ -52,7 +53,7 @@ export class OrderController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const orderId = parseInt(req.params.id);
+            const orderId = parseInt(String(validatedParams(req).id));
             if (isNaN(orderId)) {
                 throw new BadRequestError('Invalid order ID');
             }
@@ -74,7 +75,7 @@ export class OrderController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const orderId = parseInt(req.params.id);
+            const orderId = parseInt(String(validatedParams(req).id));
             if (isNaN(orderId)) {
                 throw new BadRequestError('Invalid order ID');
             }
@@ -96,7 +97,7 @@ export class OrderController {
                 throw new UnauthorizedError('User ID not found in token');
             }
 
-            const orderId = parseInt(req.params.id);
+            const orderId = parseInt(String(validatedParams(req).id));
             if (isNaN(orderId)) {
                 throw new BadRequestError('Invalid order ID');
             }
