@@ -1,0 +1,22 @@
+import "reflect-metadata"
+import "./zod-extend.js";
+import config from "config";
+import App from "./app";
+import logger from "./libs/logger";
+
+const PORT = config.get<number>('port');
+
+async function main() {
+  try {
+    await App.startServer(PORT);
+  } catch (error) {
+    const detail =
+      error instanceof Error
+        ? `${error.name}: ${error.message}${error.stack ? `\n${error.stack}` : ''}`
+        : String(error);
+    logger.error(`Failed to start the server: ${detail}`);
+    process.exit(1);
+  }
+}
+
+main();

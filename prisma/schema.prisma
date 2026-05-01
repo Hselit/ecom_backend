@@ -1,15 +1,298 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int      @id @default(autoincrement())
+  name              String
+  email             String?  @unique
+  password          String
+  phoneNumber       String   @unique
+  profile           String
+  gender            String
+  isActive          Boolean  @default(true)
+  isEmailVerified   Boolean  @default(false)
+  verificationCode  String?
+  verificationCodeExpiry DateTime?
+
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id])
+
+  addresses Address[]
+  cart      Cart?
+  orders    Order[]
+  reviews   Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user")
+}
+
+model Address {
+  id       Int     @id @default(autoincrement())
+  street1  String
+  street2  String?
+  city     String
+  state    String
+  country  String
+  lat      Float?
+  lng      Float?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("address")
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  roleName  String  @unique
+  isActive  Boolean @default(true)
+
+  users User[]
+  accessRoles AccessRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("role")
+}
+
+model AccessType {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  code        String?  @unique
+  module      String?
+  action      String?
+
+  accessRoles AccessRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("accessType")
+}
+
+model AccessRole {
+  id           Int        @id @default(autoincrement())
+  roleId       Int
+  accessTypeId Int
+  canView      Boolean    @default(true)
+  canCreate    Boolean    @default(false)
+  canUpdate    Boolean    @default(false)
+  canDelete    Boolean    @default(false)
+  isActive      Boolean    @default(true)
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  accessType AccessType @relation(fields: [accessTypeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([roleId, accessTypeId])
+  @@map("accessRole")
+}
+
+/* =========================
+   PRODUCT & CATEGORY
+========================= */
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+
+  parentId Int?
+  parent   Category? @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("category")
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  isActive    Boolean  @default(true)
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  images   ProductImage[]
+  cartItems CartItem[]
+  orderItems OrderItem[]
+  reviews  Review[]
+  inventory Inventory?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("product")
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  imageUrl String
+  isPrimary Boolean @default(false)
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("productImage")
+}
+
+model Inventory {
+  id              Int      @id @default(autoincrement())
+  quantity        Int
+  reservedQty     Int      @default(0)
+  isActive        Boolean  @default(true)
+
+  productId Int @unique
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("inventory")
+}
+
+/* =========================
+   CART
+========================= */
+
+model Cart {
+  id     Int @id @default(autoincrement())
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  items CartItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cart")
+}
+
+model CartItem {
+  id       Int @id @default(autoincrement())
+  quantity Int @default(1)
+
+  cartId   Int
+  cart     Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+  @@map("cartItem")
+}
+
+/* =========================
+   ORDER & PAYMENT
+========================= */
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  orderNumber String      @unique
+  totalAmount Float
+  status      OrderStatus @default(PENDING)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  items   OrderItem[]
+  payment Payment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order")
+}
+
+model OrderItem {
+  id       Int @id @default(autoincrement())
+  price    Float
+  quantity Int
+
+  orderId  Int
+  order    Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("orderItem")
+}
+
+model Payment {
+  id            Int @id @default(autoincrement())
+  paymentMethod String
+  transactionId String?
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+
+  orderId Int @unique
+  order   Order @relation(fields: [orderId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("payment")
+}
+
+/* =========================
+   REVIEWS
+========================= */
+
+model Review {
+  id      Int @id @default(autoincrement())
+  rating  Int
+  comment String?
+
+  userId    Int
+  productId Int
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@map("review")
+}
+
+/* =========================
+   ENUMS
+========================= */
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  DELIVERED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
 }
