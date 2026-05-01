@@ -1,5 +1,6 @@
 import express,{Application} from 'express';
 import {createServer,Server} from 'http'
+import path from 'node:path';
 import logger from './libs/logger';
 import config from 'config';
 import swaggerUi from 'swagger-ui-express';
@@ -67,6 +68,7 @@ class App{
     this.app = express();
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
     await this.setupRoutes();
     
     this.server = createServer(this.app);

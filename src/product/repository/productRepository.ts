@@ -16,16 +16,24 @@ export class ProductRepository {
 
     async createProduct(payload: CreateProductDto) {
         try {
+            const { productImage, ...fields } = payload;
             const product = await this.prisma.product.create({
                 data: {
-                    name: payload.name,
-                    slug: payload.slug,
-                    description: payload.description,
-                    sku: payload.sku,
-                    price: payload.price,
-                    stock: payload.stock,
-                    categoryId: payload.categoryId,
-                    isActive: payload.isActive ?? true
+                    name: fields.name,
+                    description: fields.description ?? null,
+                    price: fields.price,
+                    categoryId: fields.categoryId,
+                    isActive: fields.isActive ?? true,
+                    ...(productImage && {
+                        images: {
+                            create: [
+                                {
+                                    imageUrl: productImage.imageUrl,
+                                    isPrimary: productImage.isPrimary ?? true
+                                }
+                            ]
+                        }
+                    })
                 },
                 include: {
                     category: true,
@@ -36,13 +44,6 @@ export class ProductRepository {
         } catch (error: any) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2002') {
-                    const field = error.meta?.target;
-                    if (Array.isArray(field) && field.includes('slug')) {
-                        throw new BadRequestError('Product slug already exists');
-                    }
-                    if (Array.isArray(field) && field.includes('sku')) {
-                        throw new BadRequestError('Product SKU already exists');
-                    }
                     throw new BadRequestError('Product with this information already exists');
                 }
                 throw new DatabaseError(error.message);
@@ -129,35 +130,60 @@ export class ProductRepository {
                 throw new NotFoundError('Product not found');
             }
 
-            const updatedProduct = await this.prisma.product.update({
-                where: { id },
-                data: {
-                    ...(payload.name && { name: payload.name }),
-                    ...(payload.slug && { slug: payload.slug }),
-                    ...(payload.description !== undefined && { description: payload.description }),
-                    ...(payload.sku && { sku: payload.sku }),
-                    ...(payload.price !== undefined && { price: payload.price }),
-                    ...(payload.stock !== undefined && { stock: payload.stock }),
-                    ...(payload.categoryId && { categoryId: payload.categoryId }),
-                    ...(payload.isActive !== undefined && { isActive: payload.isActive })
-                },
-                include: {
-                    category: true,
-                    images: true
+            const { productImage, ...rest } = payload;
+
+            const scalarData: Prisma.ProductUpdateInput = {
+                ...(rest.name !== undefined && { name: rest.name }),
+                ...(rest.description !== undefined && { description: rest.description }),
+                ...(rest.price !== undefined && { price: rest.price }),
+                ...(rest.categoryId !== undefined && { categoryId: rest.categoryId }),
+                ...(rest.isActive !== undefined && { isActive: rest.isActive })
+            };
+
+            const hasScalarUpdates = Object.keys(scalarData).length > 0;
+
+            const updatedProduct = await this.prisma.$transaction(async (tx) => {
+                if (hasScalarUpdates) {
+                    await tx.product.update({
+                        where: { id },
+                        data: scalarData
+                    });
                 }
+
+                if (productImage) {
+                    const isPrimary = productImage.isPrimary ?? true;
+                    if (isPrimary) {
+                        await tx.productImage.updateMany({
+                            where: { productId: id, isPrimary: true },
+                            data: { isPrimary: false }
+                        });
+                    }
+                    await tx.productImage.create({
+                        data: {
+                            productId: id,
+                            imageUrl: productImage.imageUrl,
+                            isPrimary
+                        }
+                    });
+                }
+
+                return tx.product.findUnique({
+                    where: { id },
+                    include: {
+                        category: true,
+                        images: true
+                    }
+                });
             });
+
+            if (!updatedProduct) {
+                throw new NotFoundError('Product not found');
+            }
 
             return updatedProduct;
         } catch (error: any) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2002') {
-                    const field = error.meta?.target;
-                    if (Array.isArray(field) && field.includes('slug')) {
-                        throw new BadRequestError('Product slug already exists');
-                    }
-                    if (Array.isArray(field) && field.includes('sku')) {
-                        throw new BadRequestError('Product SKU already exists');
-                    }
                     throw new BadRequestError('Product with this information already exists');
                 }
                 throw new DatabaseError(error.message);

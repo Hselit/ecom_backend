@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { MulterError } from 'multer';
 import { ZodError,ZodIssue } from 'zod';
 import logger from '../libs/logger';
 import { AppError } from '../error/appError';
@@ -18,17 +19,29 @@ export function errorHandler(
     logger.error(`Request handler error: ${String(err)}`);
   }
 
-  // Zod validation errors
- if (err instanceof ZodError) {
-  return res.status(StatusCodes.BAD_REQUEST).json({
-    statusCode: StatusCodes.BAD_REQUEST,
-    message: 'Validation failed',
-    errors: err.issues.map((e: ZodIssue) => ({
-      path: e.path.join('.'),
-      message: e.message,
-    })),
-  });
-}
+  if (err instanceof MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: 'Uploaded file is too large (max 5MB)'
+      });
+    }
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      statusCode: StatusCodes.BAD_REQUEST,
+      message: err.message
+    });
+  }
+
+  if (err instanceof ZodError) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      statusCode: StatusCodes.BAD_REQUEST,
+      message: 'Validation failed',
+      errors: err.issues.map((e: ZodIssue) => ({
+        path: e.path.join('.'),
+        message: e.message
+      }))
+    });
+  }
 
   // Known application errors
   if (err instanceof AppError) {

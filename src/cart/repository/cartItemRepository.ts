@@ -36,10 +36,6 @@ export class CartItemRepository {
                 throw new NotFoundError('Product not found');
             }
 
-            if (product.stock < payload.quantity) {
-                throw new BadRequestError('Insufficient stock');
-            }
-
             // Check if item already exists in cart
             const existingItem = await this.prisma.cartItem.findUnique({
                 where: {
@@ -153,10 +149,6 @@ export class CartItemRepository {
 
             if (!product) {
                 throw new NotFoundError('Product not found');
-            }
-
-            if (product.stock < payload.quantity) {
-                throw new BadRequestError('Insufficient stock');
             }
 
             const updatedCartItem = await this.prisma.cartItem.update({
