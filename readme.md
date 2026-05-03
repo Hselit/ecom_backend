@@ -1,6 +1,11 @@
 # E-Commerce Backend
 
-Express API for the e-commerce backend. Default base URL: `http://localhost:<port>` (port from `config/default.json`, usually `3000`).
+Express API for the e-commerce backend. Default base URL: `http://localhost:<port>`.
+
+<div align="center">
+  <img src="images/E-Commerce Backend APIs.png" alt="Description">
+</div>
+
 
 ## Authentication legend
 
