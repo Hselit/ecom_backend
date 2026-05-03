@@ -1,6 +1,8 @@
 # E-Commerce Backend
 
-Express API for the e-commerce backend. Default base URL: `http://localhost:<port>` (port from `config/default.json`, usually `3000`).
+## Description
+
+REST API for an online store, built with **Express** and **TypeScript** and backed by **Prisma** and **MySQL**. It covers authentication, catalog, cart, checkout (orders and payments), reviews, inventory, and optional product image uploads. **OpenAPI** docs are served at `/api-docs`; default base URL is `http://localhost:<port>` (see `config/default.json`, usually port `3000`).
 
 ## Authentication legend
 

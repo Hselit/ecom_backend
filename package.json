@@ -1,7 +1,7 @@
 {
   "name": "ecom",
   "version": "1.0.0",
-  "description": "ecommerce-backend",
+  "description": "Express + TypeScript e-commerce REST API (Prisma/MySQL): auth, catalog, cart, orders, payments, reviews, inventory, and Swagger docs.",
   "type": "module",
   "main": "index.js",
   "scripts": {
